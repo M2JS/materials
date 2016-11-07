@@ -19,18 +19,16 @@ browser.takeScreenshot().then((base64png) => {
 
 # take screenshot and attach to cucumber output .json file (for CI Jenkins [Cucumber plugin](https://github.com/damianszczepanik/cucumber-reporting) as example)
 ```
-import {browser} from 'protractor';
-
-export = function () {
+import {browser} from "protractor";
+export  = function () {
 
     this.After((scenario, done) => {
         if (scenario.isFailed()) {
-            return browser.takeScreenshot().then(base64png => {
-                let decodedImage = new Buffer(base64png, 'base64').toString('binary');
+            browser.takeScreenshot().then(base64png => {
+                let decodedImage = new Buffer(base64png, 'base64');
                 scenario.attach(decodedImage, 'image/png');
-            }, (err) => {
-                done(err);
-            });
+            })
+                .then(done);
         } else {
             done();
         }
